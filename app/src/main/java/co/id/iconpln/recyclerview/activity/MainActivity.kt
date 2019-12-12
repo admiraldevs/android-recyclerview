@@ -20,19 +20,19 @@ class MainActivity : AppCompatActivity() {
         refreshAdapter(members)
     }
 
-    private fun refreshAdapter(members: List<Member>) {
-        val adapter = CustomAdapter(members)
-        recyclerView.adapter = adapter
-    }
-
     private fun initViews() {
         recyclerView.layoutManager = GridLayoutManager(this,1)
         //recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 
+    private fun refreshAdapter(members: List<Member>) {
+        val adapter = CustomAdapter(members)
+        recyclerView.adapter = adapter
+    }
+
     private fun prepareMemerList(): List<Member> {
         val members = ArrayList<Member>()
-
+        members.add(Member("","",false)) // for header
         for(i in 0..29){
             if(i == 0 || i == 5 || i == 16 || i == 25){
                 members.add(Member("Rahmat" + i, "Kurniawan" + i, false))
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 members.add(Member("Rahmat" + i, "Kurniawan" + i, true))
             }
         }
-        members.add(Member("","",false))
+        members.add(Member("","",false)) // for footer
         return members
     }
 }
