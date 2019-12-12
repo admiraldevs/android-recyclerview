@@ -33,8 +33,12 @@ class MainActivity : AppCompatActivity() {
     private fun prepareMemerList(): List<Member> {
         val members = ArrayList<Member>()
 
-        for(i in 0..10){
-            members.add(Member("Rahmat" + i, "Kurniawan" + i))
+        for(i in 0..29){
+            if(i == 0 || i == 5 || i == 16 || i == 25){
+                members.add(Member("Rahmat" + i, "Kurniawan" + i, false))
+            } else {
+                members.add(Member("Rahmat" + i, "Kurniawan" + i, true))
+            }
         }
         return members
     }
