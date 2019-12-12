@@ -33,7 +33,7 @@ class CustomAdapter(val members: List<Member>): RecyclerView.Adapter<RecyclerVie
         }
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_custom_layout_not, parent, false)
-        return  CustomViewHolder(view)
+        return  CustomViewHolderNot(view)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -43,20 +43,21 @@ class CustomAdapter(val members: List<Member>): RecyclerView.Adapter<RecyclerVie
             holder.first_name.setText(member.firstName)
             holder.last_name.setText(member.lastName)
         }
-        if (holder is CustomViewHolderNot) {
+
+        if(holder is CustomViewHolderNot){
             holder.first_name.setText("This first name is not available")
             holder.last_name.setText("This last name is not available")
         }
     }
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val first_name = itemView.findViewById<TextView>(R.id.first_name)
-        val last_name = itemView.findViewById<TextView>(R.id.last_name)
+        var first_name = itemView.findViewById<TextView>(R.id.first_name)
+        var last_name = itemView.findViewById<TextView>(R.id.last_name)
     }
 
     class CustomViewHolderNot(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val first_name = itemView.findViewById<TextView>(R.id.first_name)
-        val last_name = itemView.findViewById<TextView>(R.id.last_name)
+        var first_name = itemView.findViewById<TextView>(R.id.first_name)
+        var last_name = itemView.findViewById<TextView>(R.id.last_name)
     }
 
 }

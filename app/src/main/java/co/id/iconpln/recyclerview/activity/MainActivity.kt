@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 members.add(Member("Rahmat" + i, "Kurniawan" + i, true))
             }
         }
+        members.add(Member("","",false))
         return members
     }
 }
