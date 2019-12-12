@@ -2,10 +2,12 @@ package co.id.iconpln.recyclerview.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.iconpln.recyclerview.R
 import co.id.iconpln.recyclerview.adapter.CustomAdapter
+import co.id.iconpln.recyclerview.listener.onBottomReachedListener
 import co.id.iconpln.recyclerview.model.Member
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -26,13 +28,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshAdapter(members: List<Member>) {
-        val adapter = CustomAdapter(members)
+        val adapter = CustomAdapter(members, object : onBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                Log.d("@@@","@@@onBottomReached " + position)
+            }
+        })
         recyclerView.adapter = adapter
     }
 
     private fun prepareMemerList(): List<Member> {
         val members = ArrayList<Member>()
-        members.add(Member("","",false)) // for header
+
         for(i in 0..29){
             if(i == 0 || i == 5 || i == 16 || i == 25){
                 members.add(Member("Rahmat" + i, "Kurniawan" + i, false))
@@ -40,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 members.add(Member("Rahmat" + i, "Kurniawan" + i, true))
             }
         }
-        members.add(Member("","",false)) // for footer
+
         return members
     }
 }
