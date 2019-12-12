@@ -1,19 +1,21 @@
 package co.id.iconpln.recyclerview.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.id.iconpln.recyclerview.R
-import co.id.iconpln.recyclerview.listener.onBottomReachedListener
 import co.id.iconpln.recyclerview.model.Member
+import co.id.iconpln.recyclerview.model.MemberSub
 import kotlinx.android.synthetic.main.item_custom_layout.view.*
 
-class CustomAdapter(val members: List<Member>, val listener: onBottomReachedListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CustomAdapter(val context: Context, val members: List<Member>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val TYPE_AVAILABLE_YES = 0
-    private val TYPE_AVAILABLE_NOT = 1
+    private val TYPE_ITEM_VIEW = 0
+    private val TYPE_ITEM_LIST = 1
 
     override fun getItemCount(): Int {
         return members.size
@@ -21,45 +23,52 @@ class CustomAdapter(val members: List<Member>, val listener: onBottomReachedList
 
     override fun getItemViewType(position: Int): Int {
         val member = members[position]
-        return if (member.available) TYPE_AVAILABLE_YES else TYPE_AVAILABLE_NOT
+        return if (member.memberSubs.size > 0) TYPE_ITEM_LIST else TYPE_ITEM_VIEW
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType == TYPE_AVAILABLE_YES){
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_custom_layout, parent, false)
-            return CustomViewHolder(view)
+        if(viewType == TYPE_ITEM_LIST){
+            val header = LayoutInflater.from(parent.context).inflate(R.layout.item_custom_layout_list, parent, false)
+            return CustomListHolder(header)
         }
 
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_custom_layout_not, parent, false)
-        return  CustomViewHolderNot(view)
+        val footer = LayoutInflater.from(parent.context).inflate(R.layout.item_custom_layout_view, parent, false)
+        return  CustomViewHolder(footer)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(position == members.size - 1){
-            listener.onBottomReached(position)
-        }
 
         val member = members.get(position)
 
         if(holder is CustomViewHolder){
-            holder.first_name.setText(member.firstName)
-            holder.last_name.setText(member.lastName)
+
         }
 
-        if(holder is CustomViewHolderNot){
-            holder.first_name.setText("This first name is not available")
-            holder.last_name.setText("This last name is not available")
+        if(holder is CustomListHolder){
+            val recyclerView = holder.recyclerView
+            recyclerView.layoutManager = GridLayoutManager(context, 1)
+
+            val memberSubs = member.memberSubs
+            refreshSubAdapter(recyclerView, memberSubs)
         }
+    }
+
+    private fun refreshSubAdapter(recyclerView: RecyclerView, memberSubs: List<MemberSub>) {
+        val adapter = CustomSubAdapter(context, memberSubs)
+        recyclerView.adapter = adapter
     }
 
     class CustomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var first_name = itemView.findViewById<TextView>(R.id.first_name)
-        var last_name = itemView.findViewById<TextView>(R.id.last_name)
+
     }
 
-    class CustomViewHolderNot(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var first_name = itemView.findViewById<TextView>(R.id.first_name)
-        var last_name = itemView.findViewById<TextView>(R.id.last_name)
+    class CustomListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var recyclerView: RecyclerView
+
+        init {
+            // add your UI Component here
+            recyclerView = itemView.findViewById(R.id.recyclerView)
+        }
     }
 
 }

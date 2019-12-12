@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.id.iconpln.recyclerview.R
 import co.id.iconpln.recyclerview.adapter.CustomAdapter
-import co.id.iconpln.recyclerview.listener.onBottomReachedListener
 import co.id.iconpln.recyclerview.model.Member
+import co.id.iconpln.recyclerview.model.MemberSub
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -28,11 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshAdapter(members: List<Member>) {
-        val adapter = CustomAdapter(members, object : onBottomReachedListener {
-            override fun onBottomReached(position: Int) {
-                Log.d("@@@","@@@onBottomReached " + position)
-            }
-        })
+        val adapter = CustomAdapter(this, members)
         recyclerView.adapter = adapter
     }
 
@@ -40,11 +36,21 @@ class MainActivity : AppCompatActivity() {
         val members = ArrayList<Member>()
 
         for(i in 0..29){
-            if(i == 0 || i == 5 || i == 16 || i == 25){
-                members.add(Member("Rahmat" + i, "Kurniawan" + i, false))
+            if(i == 1 || i == 10){
+                members.add(Member("Rahmat" + i, "Kurniawan" + i, prepareSubMemers()))
             } else {
-                members.add(Member("Rahmat" + i, "Kurniawan" + i, true))
+                members.add(Member("Rahmat" + i, "Kurniawan" + i, ArrayList<MemberSub>()))
             }
+        }
+
+        return members
+    }
+
+    private fun prepareSubMemers(): List<MemberSub> {
+        val members = ArrayList<MemberSub>()
+
+        for(i in 0..4){
+            members.add(MemberSub("Offline"))
         }
 
         return members
